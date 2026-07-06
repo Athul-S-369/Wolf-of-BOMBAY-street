@@ -20,20 +20,13 @@ GitHub only counts commits toward **your** profile when the commit author email 
 2. Add your email if not listed, confirm the verification link in your inbox
 3. Keep **Keep my email addresses private** on or off — either works if the commit uses an email that is verified on your account
 
-### Step 2 — Add repository secrets (required)
+### Commit author (automatic)
 
-Repo → **Settings** → **Secrets and variables** → **Actions** → **New repository secret**
+The workflow commits as **Athul-S-369** using your verified GitHub email by default — no manual secrets required.
 
-| Secret name | Value |
-|-------------|--------|
-| `GIT_COMMIT_EMAIL` | Your verified GitHub email (the one you use for commits) |
-| `GIT_COMMIT_NAME` | Optional — e.g. `Athul-S-369` |
+Optional: override via repo secrets `GIT_COMMIT_NAME` / `GIT_COMMIT_EMAIL`.
 
-**Do not commit your email into the codebase.** Secrets live only in GitHub Settings.
-
-If `GIT_COMMIT_EMAIL` is missing, commits use `github-actions[bot]` and **will not** appear on your contribution graph.
-
-### Step 3 — Confirm after first run
+**Required once:** verify **imathul270@gmail.com** at [github.com/settings/emails](https://github.com/settings/emails) so commits count on your graph.
 
 After a successful workflow run on a trading day:
 

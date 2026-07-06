@@ -155,6 +155,7 @@ function recomputeMeta(store, runAt, nseSession, backtest) {
     ...store.meta,
     lastUpdated: runAt.toISOString(),
     lastUpdatedIST: `${istDateKey(runAt)} ${istTimeLabel(runAt)} IST`,
+    runCount: (store.meta.runCount ?? 0) + 1,
     sessionSlot: sessionSlot(runAt),
     targetDate: store.predictions[0]?.targetDate ?? nextTradingDay(),
     symbolCount: store.predictions.length,

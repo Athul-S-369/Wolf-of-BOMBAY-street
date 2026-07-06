@@ -55,14 +55,9 @@ jobs:
             exit 0
           fi
 
-          if [ -n "$GIT_COMMIT_EMAIL" ]; then
-            git config user.name "${GIT_COMMIT_NAME:-Athul-S-369}"
-            git config user.email "$GIT_COMMIT_EMAIL"
-          else
-            echo "::warning::Add GIT_COMMIT_EMAIL secret (your GitHub noreply email) for contribution graph credit."
-            git config user.name "github-actions[bot]"
-            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          fi
+          # Default author = repo owner (counts on contribution graph when email is verified on GitHub)
+          git config user.name "${GIT_COMMIT_NAME:-Athul-S-369}"
+          git config user.email "${GIT_COMMIT_EMAIL:-imathul270@gmail.com}"
 
           git commit -m "data: NSE session predictions $(TZ=Asia/Kolkata date +%Y-%m-%d_%H:%M-IST)"
           git push
