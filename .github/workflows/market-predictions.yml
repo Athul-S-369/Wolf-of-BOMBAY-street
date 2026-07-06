@@ -1,0 +1,68 @@
+name: Market Predictions
+
+on:
+  schedule:
+    # Mon–Fri, 3 runs during NSE hours (IST → UTC)
+    # 10:00 IST = 04:30 UTC
+    - cron: '30 4 * * 1-5'
+    # 12:30 IST = 07:00 UTC
+    - cron: '0 7 * * 1-5'
+    # 15:15 IST = 09:45 UTC (before 15:30 close)
+    - cron: '45 9 * * 1-5'
+  workflow_dispatch:
+    inputs:
+      force_run:
+        description: Bypass market-hours check (testing only)
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+jobs:
+  predict:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Run prediction engine (market hours only)
+        env:
+          FORCE_RUN: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.force_run == 'true' && '1' || '0' }}
+        run: node scripts/market-predictions.mjs
+
+      - name: Commit updated predictions
+        env:
+          GIT_COMMIT_NAME: ${{ secrets.GIT_COMMIT_NAME }}
+          GIT_COMMIT_EMAIL: ${{ secrets.GIT_COMMIT_EMAIL }}
+        run: |
+          git add public/data/predictions.json
+          if git diff --staged --quiet; then
+            echo "No changes — market may be closed or data unchanged."
+            exit 0
+          fi
+
+          if [ -n "$GIT_COMMIT_EMAIL" ]; then
+            git config user.name "${GIT_COMMIT_NAME:-Athul-S-369}"
+            git config user.email "$GIT_COMMIT_EMAIL"
+          else
+            echo "::warning::Add GIT_COMMIT_EMAIL secret (your GitHub noreply email) for contribution graph credit."
+            git config user.name "github-actions[bot]"
+            git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          fi
+
+          git commit -m "data: NSE session predictions $(TZ=Asia/Kolkata date +%Y-%m-%d_%H:%M-IST)"
+          git push

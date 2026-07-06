@@ -6,6 +6,8 @@
   "scripts": {
     "dev": "vite",
     "backend": "node backend/server.js",
+    "predict": "node scripts/market-predictions.mjs",
+    "backtest": "node scripts/backtest-predictions.mjs",
     "build": "tsc -b && vite build",
     "lint": "oxlint",
     "preview": "vite preview"

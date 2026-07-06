@@ -5,6 +5,7 @@ const cors = require('cors')
 const http = require('http')
 const { WebSocketServer } = require('ws')
 const YahooFinance = require('yahoo-finance2').default
+const { NSE_SYMBOLS, toYahoo, fromYahoo } = require('./market-symbols')
 const yf = new YahooFinance({ suppressNotices: ['yahooSurvey'] })
 
 const app = express()
@@ -12,61 +13,6 @@ app.use(cors({
   origin: ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175', 'http://localhost:5176'],
 }))
 app.use(express.json())
-
-// ─────────────────────────────────────────────────────────────────────────────
-// ALL NSE SYMBOLS TO TRACK (Yahoo Finance appends .NS)
-// ─────────────────────────────────────────────────────────────────────────────
-const NSE_SYMBOLS = [
-  // Reliance Ecosystem
-  'RELIANCE', 'JIOFIN', 'NETWORK18', 'HATHWAY', 'DEN', 'GTPL', 'RIIL',
-  // Tata Group
-  'TCS', 'TATAMOTORS', 'TATASTEEL', 'TITAN', 'TATACONSUMER', 'TATAPOWER',
-  'TATACOMM', 'TATAELXSI', 'TATACHEM', 'INDHOTEL', 'VOLTAS', 'TATATECH',
-  'TRENT', 'TATAINVEST',
-  // Adani Group
-  'ADANIENT', 'ADANIPORTS', 'ADANIGREEN', 'ATGL', 'ADANIPOWER', 'AWL', 'NDTV',
-  // HDFC / Banking
-  'HDFCBANK', 'HDFCLIFE', 'HDFCAMC', 'ICICIBANK', 'SBIN', 'AXISBANK',
-  'KOTAKBANK', 'INDUSINDBK', 'BANDHANBNK',
-  // Bajaj Group
-  'BAJFINANCE', 'BAJAJFINSV', 'BAJAJ-AUTO', 'BAJAJHLDNG',
-  // IT
-  'INFY', 'WIPRO', 'HCLTECH', 'TECHM',
-  // Auto
-  'MARUTI', 'M&M',
-  // Pharma
-  'SUNPHARMA', 'DRREDDY',
-  // PSU
-  'ONGC', 'NTPC', 'POWERGRID', 'COALINDIA',
-  // Metals / Infra
-  'JSWSTEEL', 'LT',
-  // Telecom
-  'BHARTIARTL', 'IDEA',
-  // FMCG / Consumer
-  'ITC', 'HINDUNILVR', 'NESTLEIND', 'BRITANNIA',
-  // Paints / Chemicals
-  'ASIANPAINT', 'PIDILITIND',
-  // Aditya Birla Group
-  'ULTRACEMCO', 'GRASIM', 'HINDALCO', 'ABCAPITAL',
-  // New Economy
-  'JUSTDIAL', 'NYKAA', 'ZOMATO', 'PAYTM', 'DMART',
-]
-
-// NSE symbol → Yahoo Finance symbol
-const YAHOO_OVERRIDE = {
-  'M&M': 'M%26M.NS',
-}
-
-function toYahoo(sym) {
-  return YAHOO_OVERRIDE[sym] || `${sym}.NS`
-}
-
-function fromYahoo(ySymbol) {
-  for (const [nse, yfSym] of Object.entries(YAHOO_OVERRIDE)) {
-    if (ySymbol === yfSym || ySymbol.replace('%26', '&').replace('.NS', '') === nse) return nse
-  }
-  return ySymbol.replace('.NS', '')
-}
 
 function round2(n) { return n != null ? Math.round(n * 100) / 100 : null }
 function round1(n) { return n != null ? Math.round(n * 10) / 10 : null }

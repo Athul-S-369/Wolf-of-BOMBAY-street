@@ -8,6 +8,7 @@ import CompanyNetwork from './components/Network/CompanyNetwork'
 import CompanyProfile from './components/Company/CompanyProfile'
 import ImpactAnalyzer from './components/Impact/ImpactAnalyzer'
 import OrdersPanel from './components/Orders/OrdersPanel'
+import PredictionsPanel from './components/Predictions/PredictionsPanel'
 import SectorHeatmap from './components/Dashboard/SectorHeatmap'
 import StockTable from './components/Dashboard/StockTable'
 
@@ -158,6 +159,11 @@ export default function App() {
           {viewMode === 'orders' && (
             <div className="h-full overflow-hidden">
               <OrdersPanel />
+            </div>
+          )}
+          {viewMode === 'predictions' && (
+            <div className="h-full overflow-hidden">
+              <PredictionsPanel />
             </div>
           )}
         </div>

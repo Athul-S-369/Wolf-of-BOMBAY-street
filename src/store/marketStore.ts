@@ -25,7 +25,7 @@ interface MarketStore {
   isMarketOpen: boolean
   marketStatus: 'pre-open' | 'open' | 'closed' | 'post-close' | 'unknown'
   lastUpdateTime: number
-  viewMode: 'dashboard' | 'network' | 'company' | 'impact' | 'orders' | 'heatmap'
+  viewMode: 'dashboard' | 'network' | 'company' | 'impact' | 'orders' | 'heatmap' | 'predictions'
   impactSourceId: string | null
 
   // Real-time data state

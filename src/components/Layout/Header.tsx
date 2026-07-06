@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Activity, Bell, Search, TrendingUp, Zap } from 'lucide-react'
+import { Activity, Bell, Search, Target, TrendingUp, Zap } from 'lucide-react'
 import { useMarketStore } from '../../store/marketStore'
 import { formatIndian, formatPercent } from '../../utils/format'
 
@@ -44,6 +44,7 @@ export default function Header() {
     { id: 'heatmap', label: 'HEAT MAP', icon: TrendingUp },
     { id: 'network', label: 'NETWORK', icon: Zap },
     { id: 'impact', label: 'IMPACT', icon: TrendingUp },
+    { id: 'predictions', label: 'PREDICT', icon: Target },
     { id: 'orders', label: 'ORDERS', icon: Bell },
   ] as const
 
