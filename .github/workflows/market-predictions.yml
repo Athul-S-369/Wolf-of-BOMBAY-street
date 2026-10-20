@@ -41,7 +41,7 @@ jobs:
 
       - name: Run prediction engine (market hours only)
         env:
-          FORCE_RUN: ${{ github.event_name == 'workflow_dispatch' && github.event.inputs.force_run == 'true' && '1' || '0' }}
+          FORCE_RUN: ${{ inputs.force_run && '1' || '0' }}
         run: node scripts/market-predictions.mjs
 
       - name: Commit updated predictions
